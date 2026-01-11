@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -17,14 +18,22 @@ class ProductController extends Controller
      */
     public function getCategories(): JsonResponse
     {
-        $categories = ProductCategory::where('active', true)
-            ->orderBy('name')
-            ->get(['id', 'name']);
+        try {
+            $categories = ProductCategory::where('active', true)
+                ->orderBy('name')
+                ->get(['id', 'name']);
 
-        return response()->json([
-            'success' => true,
-            'data' => $categories
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $categories
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load categories',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -48,7 +57,7 @@ class ProductController extends Controller
                 'data' => $product
             ], 201);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create product',
@@ -64,14 +73,22 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        $products = Product::with('category')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        try {
+            $products = Product::with('category')
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => $products
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $products
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load products',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -82,19 +99,27 @@ class ProductController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $product = Product::with('category')->find($id);
+        try {
+            $product = Product::with('category')->find($id);
 
-        if (!$product) {
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $product
+            ]);
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product not found'
-            ], 404);
+                'message' => 'Failed to load product',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => $product
-        ]);
     }
 
     /**
@@ -125,7 +150,7 @@ class ProductController extends Controller
                 'data' => $product
             ]);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update product',
@@ -159,7 +184,7 @@ class ProductController extends Controller
                 'message' => 'Product deleted successfully'
             ]);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete product',
