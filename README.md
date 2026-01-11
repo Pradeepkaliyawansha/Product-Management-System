@@ -112,9 +112,6 @@ cp .env.example  .env
 # Generate application key
 php artisan key:generate
 
-# Create my Sql database file
-product_management
-
 # Run migrations
 php artisan migrate
 
