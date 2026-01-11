@@ -2,9 +2,6 @@ import 'package:flutter/foundation.dart';
 import '../models/product.dart';
 import '../services/api_service.dart';
 
-/// Product Provider for state management using ChangeNotifier
-/// This class manages the application state for products and categories
-/// and provides methods to interact with the Laravel API
 class ProductProvider with ChangeNotifier {
   // API Service instance
   final ApiService _apiService = ApiService();
@@ -57,8 +54,6 @@ class ProductProvider with ChangeNotifier {
   // Category Management Methods
   // ==========================================
 
-  /// Load all categories from the API
-  /// This should be called when the app starts
   Future<void> loadCategories() async {
     try {
       _isLoading = true;
@@ -94,8 +89,6 @@ class ProductProvider with ChangeNotifier {
   // Product Management Methods
   // ==========================================
 
-  /// Load all products from the API
-  /// This will fetch all products with their categories
   Future<void> loadProducts() async {
     try {
       _isLoading = true;

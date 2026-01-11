@@ -7,7 +7,6 @@ class ProductCategory {
   ProductCategory({required this.id, required this.name});
 
   /// Create ProductCategory from JSON response
-  /// Example JSON: {"id": 1, "name": "Electronics"}
   factory ProductCategory.fromJson(Map<String, dynamic> json) {
     return ProductCategory(id: json['id'] as int, name: json['name'] as String);
   }
@@ -53,8 +52,6 @@ class Product {
     this.updatedAt,
   });
 
-  /// Create Product from JSON response from Laravel API
-  /// Example JSON:
   /// {
   ///   "id": 1,
   ///   "name": "iPhone 15 Pro",
@@ -85,7 +82,7 @@ class Product {
   }
 
   /// Convert Product to JSON for API requests (POST/PUT)
-  /// Only sends the fields required by the API
+  /// Excludes id, createdAt, updatedAt, and category
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -96,7 +93,6 @@ class Product {
   }
 
   /// Create a copy of Product with some fields updated
-  /// Useful for updating product data without mutating the original
   Product copyWith({
     int? id,
     String? name,
@@ -151,6 +147,7 @@ class Product {
   String get formattedPrice => '\$${price.toStringAsFixed(2)}';
 
   /// Check if product is valid for submission
+  /// validation for name, categoryId, and price for client-side character limit
   bool get isValid {
     return name.trim().isNotEmpty &&
         name.trim().length <= 255 &&
