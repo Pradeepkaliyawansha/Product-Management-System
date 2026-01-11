@@ -2,8 +2,6 @@
 
 A full-stack product management application with a Flutter mobile client and Laravel REST API backend. This system allows users to manage products and categories with full CRUD operations.
 
-## ✨ Features
-
 ## 🛠 Tech Stack
 
 ### Backend
@@ -114,8 +112,8 @@ cp .env.example  .env
 # Generate application key
 php artisan key:generate
 
-# Create SQLite database file
-touch database/database.sqlite
+# Create my Sql database file
+product_management
 
 # Run migrations
 php artisan migrate
@@ -256,6 +254,7 @@ GET /api/v1/products
 
 
 ### Mobile App Screens
+It's Very basic UI design not the best.  
 
 1. **Product List Screen**
    - Displays all products with category and price
